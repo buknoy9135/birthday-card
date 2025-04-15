@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #ffe0f0 0%, #ffd1dc 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Quicksand', sans-serif;
+      overflow-y: auto;
+    }
+
+    .card-container {
+      perspective: 1200px;
+      width: 100%;
+      max-width: 420px;
+      margin: 20px;
+    }
+
+    .card {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+      cursor: pointer;
+    }
+
+    .card.opened {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(255, 105, 180, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      box-sizing: border-box;
+    }
+
+    .front {
+      background: #fff0f6;
+      color: #ff69b4;
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5rem;
+      text-align: center;
+    }
+
+    .back {
+      background: white;
+      transform: rotateY(180deg);
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow-y: auto;
+    }
+
+    .back-inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .back h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #ff69b4;
+      text-align: center;
+    }
+
+    .back .typing-container {
+      width: 100%;
+      max-height: 100%;
+      overflow: hidden;
+      white-space: pre-wrap;
+      font-size: 1rem;
+      color: #444;
+      text-align: left;
+      line-height: 1.6;
+      padding: 0 10px;
+      border-right: 2px solid pink;
+      animation: typing-multiline 6s steps(300, end) forwards, blink 1s step-end infinite;
+    }
+
+    @keyframes typing-multiline {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: transparent }
+      50% { border-color: pink }
+    }
+
+    .signature {
+      margin-top: 15px;
+      font-style: italic;
+      color: #888;
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out forwards;
+      animation-delay: 6.5s;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #ff69b4;
+      border-radius: 50%;
+      animation: float 5s infinite ease-in-out;
+      opacity: 0.4;
+      z-index: -1;
+    }
+
+    .confetti:nth-child(1) { left: 20%; animation-delay: 0s; }
+    .confetti:nth-child(2) { left: 40%; animation-delay: 1s; }
+    .confetti:nth-child(3) { left: 60%; animation-delay: 2s; }
+    .confetti:nth-child(4) { left: 80%; animation-delay: 3s; }
+    .confetti:nth-child(5) { left: 30%; animation-delay: 1.5s; }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-100vh); }
+    }
+
+    @media (max-width: 480px) {
+      .front {
+        font-size: 2rem;
+      }
+
+      .back h1 {
+        font-size: 1.6rem;
+      }
+
+      .back .typing-container {
+        font-size: 0.95rem;
+      }
+
+      .signature {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Confetti Background -->
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+
+  <!-- Card -->
+  <div class="card-container">
+    <div class="card" id="birthdayCard">
+      <div class="card-face front">Click to Open 🎁</div>
+      <div class="card-face back">
+        <div class="back-inner">
+          <h1>Happy 15th Birthday!</h1>
+          <div class="typing-container" id="typedText">
+To my amazing daughter Johaira, watching you grow into such a smart, kind, and beautiful young lady fills me with pride and love every day. May your year be as bright and special as you are. 💕🎉
+          </div>
+          <div class="signature">– With all my love, Papa 💖</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" preload="auto"></audio>
+
+  <script>
+    const card = document.getElementById('birthdayCard');
+    const bgMusic = document.getElementById('bgMusic');
+
+    card.addEventListener('click', () => {
+      if (!card.classList.contains('opened')) {
+        card.classList.add('opened');
+        setTimeout(() => {
+          bgMusic.play().catch(() => {
+            console.log("Autoplay blocked. User must interact.");
+          });
+        }, 800);
+      }
+    });
+  </script>
+
+</body>
+</html>
